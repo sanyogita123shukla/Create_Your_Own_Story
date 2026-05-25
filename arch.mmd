@@ -1,0 +1,24 @@
+graph TD
+    subgraph Client [Frontend Client]
+        UI["React 18 UI / Framer Motion / Tailwind v4"]
+        Canvas["@xyflow/react Story Node Canvas"]
+        DataLayer["Abstracted Data Store & Hooks"]
+        
+        UI --- DataLayer
+        Canvas --- DataLayer
+    end
+
+    subgraph Backend [Firebase Cloud]
+        Auth["Firebase Authentication"]
+        RTDB["Realtime Database"]
+    end
+
+    DataLayer -->|"Cursor Pagination"| RTDB
+    RTDB -->|"Realtime Listeners"| DataLayer
+    DataLayer -->|"runTransaction()"| RTDB
+    UI -->|"OAuth / Guest"| Auth
+
+    style Client fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#fff
+    style Backend fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#000
+    style RTDB fill:#f59e0b,stroke:#b45309,stroke-width:2px,color:#000
+    style Auth fill:#fcd34d,stroke:#b45309,stroke-width:2px,color:#000

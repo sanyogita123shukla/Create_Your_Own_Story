@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant User
+    participant UI as React Component
+    participant Store as Data Store
+    participant DB as Firebase RTDB
+
+    User->>UI: Submits new branch text
+    UI->>Store: Validates & calls appendNode()
+    Store->>DB: runTransaction(parentNode.children)
+    Note right of Store: Locks parent node to prevent<br/>race conditions during high traffic
+    DB-->>Store: Transaction Success
+    Store->>DB: push(newNodeData)
+    DB-->>Store: Trigger onValue() Listener
+    Store-->>UI: Updates React State (Optimistic UI)
+    UI-->>User: Instantly renders new branch on Canvas
